@@ -18,6 +18,7 @@ private slots:
     void on_DowngradeBtn_clicked();
     void on_BSPathSelectBtn_clicked();
     void on_ReloadCurrBSVersionBtn_clicked();
+    void on_BSPath_textChanged(QString);
 
 private:
     Ui::BeatsaberDowngraderWindow *ui;

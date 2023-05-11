@@ -31,16 +31,16 @@ Json::Value downloadAndParseJson(){
 // This will probably break some time!
 std::string GetGameVersion(std::filesystem::path GamePath){
     std::filesystem::path gamemanagersPath = GamePath.append("Beat Saber_Data").append("globalgamemanagers");
-    
+    if (!std::filesystem::exists(gamemanagersPath)) return "Not Found! Check Path!";
     std::fstream fin(gamemanagersPath, std::ios::in|std::ios::binary);
-    fin.seekg (0, fin.end);
-    int length = fin.tellg();
-    fin.seekg (0, fin.beg);
-    char * buffer = new char [sizeof(int64_t)];
     std::string key = "public.app-category.games";
     std::regex ver("[\\d]+.[\\d]+.[\\d]+");
     if (fin.is_open())
     {
+        fin.seekg (0, fin.end);
+        int length = fin.tellg();
+        fin.seekg (0, fin.beg);
+        char * buffer = new char [sizeof(int64_t)];
 
         int pos = 0;
         while (fin.tellg() < length && pos < key.size())

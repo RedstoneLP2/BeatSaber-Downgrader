@@ -6,7 +6,6 @@
 BeatsaberDowngraderWindow::BeatsaberDowngraderWindow(QMainWindow *parent) : QMainWindow(parent), ui(new Ui::BeatsaberDowngraderWindow)
 {
     ui->setupUi(this);
-    std::cout<<"setup ui"<<std::endl;
     this->setFixedSize(this->size());
     this->on_ReloadBSVersionsBtn_clicked();
     this->show();
@@ -53,9 +52,14 @@ void BeatsaberDowngraderWindow::on_BSPathSelectBtn_clicked(){
     }
 }
 
+void BeatsaberDowngraderWindow::on_BSPath_textChanged(QString text){
+        on_ReloadCurrBSVersionBtn_clicked();
+}
+
 void BeatsaberDowngraderWindow::on_ReloadCurrBSVersionBtn_clicked(){
+    //if (ui->BSPath->text().isEmpty()) return;
     //std::cout<<GetGameVersion(std::filesystem::path(ui->BSPath->text().toStdString()))<<std::endl;
-    ui->CurrBSVersion->setText(QString(GetGameVersion(std::filesystem::path(ui->BSPath->text().toStdString())).c_str()));
+    ui->CurrBSVersion->setText(QString(GetGameVersion(std::filesystem::path(ui->BSPath->text().toStdString())).c_str()));    
 }
 
 
