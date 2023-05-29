@@ -71,7 +71,7 @@ int BackupBSPath(std::filesystem::path BSPath){
     std::filesystem::path BackupPath;
     BackupPath = BSPath;
     BackupPath+=std::filesystem::path(".bak");
-    std::filesystem::remove(BackupPath);
+    std::filesystem::remove_all(BackupPath);
     std::filesystem::copy(BSPath,BackupPath);
     return 0;
 }
