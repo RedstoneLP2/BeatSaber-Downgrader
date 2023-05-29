@@ -23,5 +23,7 @@ private slots:
 private:
     Ui::BeatsaberDowngraderWindow *ui;
     BeatsaberDowngraderWindow *pWindow;
+    void readSettings();
+    void writeSettings();
         
 };

@@ -9,6 +9,7 @@
 #include <regex>
 #include <format>
 #include <stdlib.h>
+#include <QSettings>
 
 std::string GetGameVersion(std::filesystem::path);
 Json::Value downloadAndParseJson();

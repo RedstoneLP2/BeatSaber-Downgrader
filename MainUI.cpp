@@ -6,6 +6,7 @@
 BeatsaberDowngraderWindow::BeatsaberDowngraderWindow(QMainWindow *parent) : QMainWindow(parent), ui(new Ui::BeatsaberDowngraderWindow)
 {
     ui->setupUi(this);
+    readSettings();
     this->setFixedSize(this->size());
     this->on_ReloadBSVersionsBtn_clicked();
     this->show();
@@ -28,6 +29,7 @@ void BeatsaberDowngraderWindow::on_ReloadBSVersionsBtn_clicked(){
 
 void BeatsaberDowngraderWindow::on_DowngradeBtn_clicked(){
     
+    writeSettings();
     std::string manifestId = ui->BSVersionSelect->currentData().toString().toStdString();
     std::filesystem::path BSPath = std::filesystem::path(ui->BSPath->text().toStdString());
     std::string Username = ui->UsernameEntry->text().toStdString();
@@ -37,6 +39,7 @@ void BeatsaberDowngraderWindow::on_DowngradeBtn_clicked(){
     downloadDepot(manifestId,Username,Password,SteamGuard);
     BackupBSPath(BSPath);
     copyDepot(BSPath);
+    
 }
 
 void BeatsaberDowngraderWindow::on_BSPathSelectBtn_clicked(){
@@ -58,4 +61,26 @@ void BeatsaberDowngraderWindow::on_BSPath_textChanged(QString text){
 
 void BeatsaberDowngraderWindow::on_ReloadCurrBSVersionBtn_clicked(){
     ui->CurrBSVersion->setText(QString(GetGameVersion(std::filesystem::path(ui->BSPath->text().toStdString())).c_str()));    
+}
+
+void BeatsaberDowngraderWindow::readSettings()
+{
+    QSettings settings("RedstoneLP2", "BS_Downgrader");
+
+
+    settings.beginGroup("BS_DowngraderSettings");
+    ui->UsernameEntry->setText(settings.value("SteamUsername").toString());
+    ui->BSPath->setText(settings.value("BSPath").toString());
+    settings.endGroup();
+}
+
+void BeatsaberDowngraderWindow::writeSettings()
+{
+    QSettings settings("RedstoneLP2", "BS_Downgrader");
+
+
+    settings.beginGroup("BS_DowngraderSettings");
+    settings.setValue("SteamUsername",ui->UsernameEntry->text());
+    settings.setValue("BSPath",ui->BSPath->text());
+    settings.endGroup();
 }
