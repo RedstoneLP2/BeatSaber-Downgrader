@@ -11,16 +11,16 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
 
 Json::Value downloadAndParseJson(){
     CURL *curl;
-  CURLcode res;
-  std::string readBuffer;
-  curl = curl_easy_init();
-      if(curl) {
+    CURLcode res;
+    std::string readBuffer;
+    curl = curl_easy_init();
+        if(curl) {
             curl_easy_setopt(curl, CURLOPT_URL, "https://raw.githubusercontent.com/RiskiVR/BSLegacyLauncher/master/Resources/BSVersions.json");
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
             res = curl_easy_perform(curl);
             curl_easy_cleanup(curl);
-      }
+        }
     Json::Reader reader;
     Json::Value obj;
     reader.parse(readBuffer, obj); 
@@ -63,23 +63,6 @@ std::string GetGameVersion(std::filesystem::path GamePath){
         }
         
         std::cout<<version<<std::endl;
-        
-        //fin.seekg(fin.tellg()-1);
-        /*
-        for (int i = 0; i<10;i++){
-            std::cout<<fin.get()<<std::endl;
-        }
-        */
-        //fin.read(buffer,sizeof(int64_t));
-
-        //std::cout<< std::endl;
-        //std::cout<<buffer<<std::endl;
-/*
-        std::string line;
-        std::getline(fin,line);
-        std::smatch result;
-        std::regex_search(line,result,ver);
-*/
     return version;
     }
 }

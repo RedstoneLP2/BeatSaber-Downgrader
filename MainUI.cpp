@@ -25,9 +25,9 @@ void BeatsaberDowngraderWindow::on_ReloadBSVersionsBtn_clicked(){
     }
 }
 
-// TODO: 
+
 void BeatsaberDowngraderWindow::on_DowngradeBtn_clicked(){
-    //std::cout<<ui->BSVersionSelect->currentData().toString().toStdString()<<std::endl;
+    
     std::string manifestId = ui->BSVersionSelect->currentData().toString().toStdString();
     std::filesystem::path BSPath = std::filesystem::path(ui->BSPath->text().toStdString());
     std::string Username = ui->UsernameEntry->text().toStdString();
@@ -42,7 +42,7 @@ void BeatsaberDowngraderWindow::on_DowngradeBtn_clicked(){
 void BeatsaberDowngraderWindow::on_BSPathSelectBtn_clicked(){
     QFileDialog FileDialog(this);
     FileDialog.setFileMode(QFileDialog::Directory);
-    // = QFileDialog(this, QString("Select BeatSaber Main Directory"));
+
     QStringList fileNames;
     FileDialog.setWindowTitle(QString("Select BeatSaber Main Directory"));
     if (FileDialog.exec()){
@@ -57,11 +57,5 @@ void BeatsaberDowngraderWindow::on_BSPath_textChanged(QString text){
 }
 
 void BeatsaberDowngraderWindow::on_ReloadCurrBSVersionBtn_clicked(){
-    //if (ui->BSPath->text().isEmpty()) return;
-    //std::cout<<GetGameVersion(std::filesystem::path(ui->BSPath->text().toStdString()))<<std::endl;
     ui->CurrBSVersion->setText(QString(GetGameVersion(std::filesystem::path(ui->BSPath->text().toStdString())).c_str()));    
 }
-
-
-
-// /mnt/games/SteamLibrary/steamapps/common/Beat Saber
