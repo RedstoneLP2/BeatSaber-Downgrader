@@ -92,6 +92,12 @@
         "ios": "cpp",
         "locale": "cpp",
         "queue": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "codecvt": "cpp",
+        "numeric": "cpp",
+        "regex": "cpp",
+        "stdfloat": "cpp",
+        "*.ipp": "cpp",
+        "hash_set": "cpp"
     }
 }

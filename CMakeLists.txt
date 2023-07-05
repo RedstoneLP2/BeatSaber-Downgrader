@@ -28,9 +28,11 @@ include_directories(${JSON_INC_PATH})
 
 add_executable(BS_Downgrader
     Main.ui
+    DepotDownloader.ui
     MainUI.cpp
     main.cpp
     util.cpp
+    DepotDownloaderWrapper.cpp
 )
 
 target_link_libraries(BS_Downgrader Qt5::Widgets ${CURL_LIBRARIES}  ${JSONCPP_LIBRARIES})

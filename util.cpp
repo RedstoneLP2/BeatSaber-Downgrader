@@ -1,8 +1,5 @@
 #include "common.h"
 
-std::string appId   = "620980";
-std::string depotId = "620981";
-
 static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
     ((std::string*)userp)->append((char*)contents, size * nmemb);
@@ -72,21 +69,27 @@ int BackupBSPath(std::filesystem::path BSPath){
     BackupPath = BSPath;
     BackupPath+=std::filesystem::path(".bak");
     std::filesystem::remove_all(BackupPath);
-    std::filesystem::copy(BSPath,BackupPath);
+    std::cout << "Creating Backup!"<<std::endl;
+    std::filesystem::copy(BSPath,BackupPath,std::filesystem::copy_options::recursive);
     return 0;
 }
 
 int copyDepot(std::filesystem::path BSPath){
-    std::filesystem::path source = std::filesystem::path(getenv("HOME")).append(".steam").append("steamcmd").append("linux32").append("steamapps").append("content").append("app_620980").append("depot_620981");
+    std::filesystem::path source = std::filesystem::path(std::filesystem::current_path().append("BeatSaberCache"));
     const auto copyOptions = std::filesystem::copy_options::overwrite_existing
                            | std::filesystem::copy_options::recursive;
-
+    std::cout<<"Copying files!"<<std::endl;
     std::filesystem::copy(source,BSPath,copyOptions);
+    std::cout<<"Finished Copying!"<<std::endl;
     return 0;
 }
 
-int downloadDepot(std::string manifestId, std::string Username, std::string Password, std::string SteamGuard=""){
-    // Linux only for now
-    std::string command = std::format("steamcmd +login {} {} {} +download_depot {} {} {} +quit",Username,Password,SteamGuard,appId,depotId,manifestId);
-    return system(command.c_str());
+int findDepotDownloader(){
+    std::filesystem::path cwd = std::filesystem::current_path().append("DepotDownloader");
+    if (!std::filesystem::exists(cwd)){
+        std::cout<< "DepotDownloader not found at "<<cwd<<std::endl;
+        std::cout<< "Make sure you downloaded DepotDownloader and placed it in the Working Directory"<<std::endl;
+        return 1;
+    }
+    return 0;
 }

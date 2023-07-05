@@ -9,7 +9,9 @@ BeatsaberDowngraderWindow::BeatsaberDowngraderWindow(QMainWindow *parent) : QMai
     readSettings();
     this->setFixedSize(this->size());
     this->on_ReloadBSVersionsBtn_clicked();
+    DDL = new DepotDownloader();
     this->show();
+    
 }
 
 BeatsaberDowngraderWindow::~BeatsaberDowngraderWindow()
@@ -34,12 +36,15 @@ void BeatsaberDowngraderWindow::on_DowngradeBtn_clicked(){
     std::filesystem::path BSPath = std::filesystem::path(ui->BSPath->text().toStdString());
     std::string Username = ui->UsernameEntry->text().toStdString();
     std::string Password = ui->PasswordEntry->text().toStdString();
-    std::string SteamGuard = ui->SteamGuardEntry->text().toStdString();
+    bool SkipBackup = ui->SkipBackup->isChecked();
+    if(!SkipBackup){
+        BackupBSPath(BSPath);
+    }
 
-    downloadDepot(manifestId,Username,Password,SteamGuard);
-    BackupBSPath(BSPath);
+    //DDL->show();
+    downloadDepot(manifestId,Username,Password,DDL); 
     copyDepot(BSPath);
-    
+
 }
 
 void BeatsaberDowngraderWindow::on_BSPathSelectBtn_clicked(){

@@ -1,5 +1,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QFileDialog>
+#include "common.h"
 
 namespace Ui {
 class BeatsaberDowngraderWindow;
@@ -23,6 +24,7 @@ private slots:
 private:
     Ui::BeatsaberDowngraderWindow *ui;
     BeatsaberDowngraderWindow *pWindow;
+    DepotDownloader *DDL;
     void readSettings();
     void writeSettings();
         
