@@ -19,7 +19,7 @@ if(CMAKE_VERSION VERSION_LESS "3.7.0")
     set(CMAKE_INCLUDE_CURRENT_DIR ON)
 endif()
 
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Concurrent REQUIRED)
 
 find_package(CURL REQUIRED) 
 include_directories(${CURL_INCLUDE_DIR})
@@ -35,4 +35,4 @@ add_executable(BS_Downgrader
     DepotDownloaderWrapper.cpp
 )
 
-target_link_libraries(BS_Downgrader Qt5::Widgets ${CURL_LIBRARIES}  ${JSONCPP_LIBRARIES})
+target_link_libraries(BS_Downgrader Qt5::Widgets Qt5::Concurrent ${CURL_LIBRARIES}  ${JSONCPP_LIBRARIES})

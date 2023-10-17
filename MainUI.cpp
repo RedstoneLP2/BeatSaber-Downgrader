@@ -2,6 +2,7 @@
 #include "MainUI.h"
 #include "common.h"
 #include <iostream>
+#include <QtConcurrent>
 
 BeatsaberDowngraderWindow::BeatsaberDowngraderWindow(QMainWindow *parent) : QMainWindow(parent), ui(new Ui::BeatsaberDowngraderWindow)
 {
@@ -9,9 +10,7 @@ BeatsaberDowngraderWindow::BeatsaberDowngraderWindow(QMainWindow *parent) : QMai
     readSettings();
     this->setFixedSize(this->size());
     this->on_ReloadBSVersionsBtn_clicked();
-    DDL = new DepotDownloader();
     this->show();
-    
 }
 
 BeatsaberDowngraderWindow::~BeatsaberDowngraderWindow()
@@ -37,14 +36,21 @@ void BeatsaberDowngraderWindow::on_DowngradeBtn_clicked(){
     std::string Username = ui->UsernameEntry->text().toStdString();
     std::string Password = ui->PasswordEntry->text().toStdString();
     bool SkipBackup = ui->SkipBackup->isChecked();
-    if(!SkipBackup){
-        BackupBSPath(BSPath);
-    }
-
-    //DDL->show();
-    downloadDepot(manifestId,Username,Password,DDL); 
-    copyDepot(BSPath);
-
+    
+    QtConcurrent::run([=]() {
+        DDL = new DepotDownloader();
+        ui->DowngradeBtn->setEnabled(false);
+        DDL->show();
+        if(!SkipBackup){
+            BackupBSPath(BSPath);
+        }
+        
+        //DDL->show();
+        if (!downloadDepot(manifestId,Username,Password,DDL)) {
+            copyDepot(BSPath);
+        }
+        ui->DowngradeBtn->setEnabled(true);
+    });
 }
 
 void BeatsaberDowngraderWindow::on_BSPathSelectBtn_clicked(){

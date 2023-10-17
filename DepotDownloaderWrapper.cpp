@@ -11,22 +11,26 @@ int downloadDepot(std::string manifestId, std::string Username, std::string Pass
     }
     
     std::cout<<"Starting Download"<<std::endl;
-    std::string cmd = std::format("./DepotDownloader -app {} -depot {} -manifest {} -username {} -password {} -dir {} -validate", appId, depotId, manifestId, Username, Password, std::filesystem::current_path().append("BeatSaberCache").string());
+    std::string cmd = std::format("./DepotDownloader -app {} -depot {} -manifest {} -username {} -password {} -dir {} -validate 2>&1", appId, depotId, manifestId, Username, Password, std::filesystem::current_path().append("BeatSaberCache").string());
+    int ret = 0;
 #ifdef _WIN32
-    std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd.c_str(), "r"), _pclose);
+    const auto deleter = [&ret](FILE* file) { ret = file ? _pclose(file) : 0; };
+    std::unique_ptr<FILE, decltype(deleter)> pipe(_popen(cmd.c_str(), "r"), deleter);
 #elif __linux__
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd.c_str(), "r"), pclose);
+    const auto deleter = [&ret](FILE* file) { ret = file ? pclose(file) : 0; };
+    std::unique_ptr<FILE, decltype(deleter)> pipe(popen(cmd.c_str(), "r"), deleter);
 #endif
     std::array<char, 128> buffer;
     if (!pipe) {
         throw std::runtime_error("popen() failed!");
     }
     while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-        DDL->AppendTextbox(QString("test"));
-        std::cout << buffer.data();
+        DDL->AppendTextbox(QString(buffer.data()));
+        //std::cout << buffer.data();
 
     }
-    return 0;
+    std::cout << "RETURN CODE: " << ((std::string(buffer.data()).find("Error") == -1) ? 0 : 1) <<std::endl;
+    return ((std::string(buffer.data()).find("Error") == -1) ? 0 : 1);
 }
 
 DepotDownloader::DepotDownloader(QWidget *parent) : QWidget(parent), ui(new Ui::DepotDownloader)
@@ -41,7 +45,7 @@ DepotDownloader::~DepotDownloader()
 }
 
 int DepotDownloader::AppendTextbox(QString text){
-    logOutput.appendPlainText(text);
-    logOutput.repaint();
+    ui->logOutput->appendPlainText(text);
+    ui->logOutput->repaint();
     return 0;
 }

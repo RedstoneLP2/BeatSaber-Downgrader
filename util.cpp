@@ -62,16 +62,21 @@ std::string GetGameVersion(std::filesystem::path GamePath){
         std::cout<<version<<std::endl;
     return version;
     }
+    return "Not Found!";
 }
 
 int BackupBSPath(std::filesystem::path BSPath){
     std::filesystem::path BackupPath;
     BackupPath = BSPath;
     BackupPath+=std::filesystem::path(".bak");
-    std::filesystem::remove_all(BackupPath);
+    std::error_code ec;
+    std::filesystem::remove_all(BackupPath,ec);
+    if (ec) {
+        return ec.value();
+    }
     std::cout << "Creating Backup!"<<std::endl;
-    std::filesystem::copy(BSPath,BackupPath,std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
-    return 0;
+    std::filesystem::copy(BSPath,BackupPath,std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing,ec);
+    return ec.value();
 }
 
 int copyDepot(std::filesystem::path BSPath){
@@ -79,9 +84,10 @@ int copyDepot(std::filesystem::path BSPath){
     const auto copyOptions = std::filesystem::copy_options::overwrite_existing
                            | std::filesystem::copy_options::recursive;
     std::cout<<"Copying files!"<<std::endl;
-    std::filesystem::copy(source,BSPath,copyOptions);
+    std::error_code ec;
+    std::filesystem::copy(source,BSPath,copyOptions,ec);
     std::cout<<"Finished Copying!"<<std::endl;
-    return 0;
+    return ec.value();
 }
 
 int findDepotDownloader(){

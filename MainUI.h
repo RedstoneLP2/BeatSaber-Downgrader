@@ -27,5 +27,4 @@ private:
     DepotDownloader *DDL;
     void readSettings();
     void writeSettings();
-        
 };
