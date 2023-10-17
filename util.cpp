@@ -70,7 +70,7 @@ int BackupBSPath(std::filesystem::path BSPath){
     BackupPath+=std::filesystem::path(".bak");
     std::filesystem::remove_all(BackupPath);
     std::cout << "Creating Backup!"<<std::endl;
-    std::filesystem::copy(BSPath,BackupPath,std::filesystem::copy_options::recursive);
+    std::filesystem::copy(BSPath,BackupPath,std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
     return 0;
 }
 
