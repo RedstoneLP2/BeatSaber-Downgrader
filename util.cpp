@@ -12,7 +12,7 @@ Json::Value downloadAndParseJson(){
     std::string readBuffer;
     curl = curl_easy_init();
         if(curl) {
-            curl_easy_setopt(curl, CURLOPT_URL, "https://raw.githubusercontent.com/RiskiVR/BSLegacyLauncher/master/Resources/BSVersions.json");
+            curl_easy_setopt(curl, CURLOPT_URL, "https://raw.githubusercontent.com/RedstoneLP2/BS_Downgrader_meta/master/BSVersions.json");
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
             res = curl_easy_perform(curl);
